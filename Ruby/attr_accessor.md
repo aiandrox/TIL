@@ -1,3 +1,5 @@
+## attr_accessor
+
 ```
 attr_accessor :name
 ↓
@@ -10,6 +12,7 @@ def name=(val)
 end
 ```
 
+## attr_reader
  
 ```
 attr_reader :name
@@ -18,6 +21,8 @@ def name
   @name
 end
 ```
+
+## attr_writer
 
 ```
 attr_writer :name
