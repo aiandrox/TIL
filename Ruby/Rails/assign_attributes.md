@@ -1,4 +1,4 @@
-## `assign_attributes`
+## assign_attributes
 
 ```
   def update
