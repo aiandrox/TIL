@@ -42,9 +42,9 @@ end
 ## default値の追加
 
 ```
-class ChangeColumnDefaultUserOfName < ActiveRecord::Migration
+class ChangeColumnDefaultUserOfAdmin < ActiveRecord::Migration
   def change
-    change_column_default :users, :name, from: nil, to: 'default name'
+    change_column_default :users, :admin, from: nil, to: 0
   end
 end 
 ```
