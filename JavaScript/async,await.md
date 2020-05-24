@@ -1,7 +1,7 @@
 AxiosはPromissオブジェクトで返ってきてくれる。
 チェーンな書き方
 
-```
+```js
 axios.get(url)
   .then(response => {
     // 正常系
@@ -19,7 +19,7 @@ APIを叩いて200レスポンスだったらさらに別のAPI叩くみたい�
 
 async/await
 
-```
+```js
 qsync function methodKorewoYobuyo() {
   try {
     const res = await axios.get(url);
@@ -32,7 +32,7 @@ qsync function methodKorewoYobuyo() {
 
 使うときには`methodKorewoYobuyo()`として実行する。
 
-```
+```ruby
 def hoge
   # 処理
 rescue StandardError => e
