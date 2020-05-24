@@ -1,4 +1,4 @@
-```
+```js
 if (!!remindDay === false) {
   const editedRemindDay = 0
 } else {
@@ -10,7 +10,7 @@ if (!!remindDay === false) {
 
 ↓
 
-```
+```js
 const editedRemindDay = !!remindDay === false ? 0 : this.filter(remindDay)
 ```
 
