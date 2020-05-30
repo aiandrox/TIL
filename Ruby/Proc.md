@@ -54,3 +54,7 @@ Procオブジェクトに対して`call(引数)`をすると、`|s|`に引数を
 [1, 2, 3].map(&:to_s)
 ```
 は、シンボル`:to_s`を`&`の効果でProc化（シンボルだからto_procすると同じ名前のProcオブジェクト（つまりto_sメソッド）を呼び出す）して実行するという意味
+
+
+https://qiita.com/kasei-san/items/0392097791d3a5998216  
+https://docs.ruby-lang.org/ja/2.2.0/doc/spec=2fcall.html#block  
