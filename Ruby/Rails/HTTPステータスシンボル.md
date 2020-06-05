@@ -1,10 +1,10 @@
 ```
 Informational
-  100	:continue
+ 	100	:continue
  	101	:switching_protocols
  	102	:processing
 Success
-  200	:ok
+ 	200	:ok
  	201	:created
  	202	:accepted
  	203	:non_authoritative_information
@@ -15,7 +15,7 @@ Success
  	208	:already_reported
  	226	:im_used
 Redirection
-  300	:multiple_choices
+ 	300	:multiple_choices
  	301	:moved_permanently
  	302	:found
  	303	:see_other
@@ -25,7 +25,7 @@ Redirection
  	307	:temporary_redirect
  	308	:permanent_redirect
 Client Error
-  400	:bad_request
+ 	400	:bad_request
  	401	:unauthorized
  	402	:payment_required
  	403	:forbidden
@@ -51,7 +51,7 @@ Client Error
  	429	:too_many_requests
  	431	:request_header_fields_too_large
 Server Error
-  500	:internal_server_error
+ 	500	:internal_server_error
  	501	:not_implemented
  	502	:bad_gateway
  	503	:service_unavailable
