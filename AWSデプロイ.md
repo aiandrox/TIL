@@ -1,5 +1,14 @@
 # デプロイのコマンド記録
 
+## 環境
+
+- Ruby 2.6.6
+- Rails 5.2.4.3
+- node 14.4.0
+- MySQL 8.0.19（EC2は 15.1 Distrib 5.5.64-MariaDB）
+- Bundler 2.1.4
+
+
 `$ ssh -v -i "aws-key.pem" ec2-user@IPアドレス`
 
 ```shell
@@ -169,4 +178,66 @@ default: &default
 [username@ip-10-0-11-43 config]$ cd /var/www/hashlog/
 [username@ip-10-0-11-43 hashlog]$ gem install bundler:2.1.4  # bundle installが通らなかったときに指示された。ローカルも2.1.4だった。
 [username@ip-10-0-11-43 hashlog]$ bundle install
+```
+
+### MySQLの設定
+
+```
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
+# ちなみに指定をしないとdevelopment, testができる
+
+Authentication plugin 'sha256_password' cannot be loaded: /usr/lib64/mysql/plugin/sha256_password.so: cannot open shared object file: No such file or directory
+Couldn't create 'hashlog_production' database. Please check your configuration.
+rails aborted!
+Mysql2::Error: Authentication plugin 'sha256_password' cannot be loaded: /usr/lib64/mysql/plugin/sha256_password.so: cannot open shared object file: No such file or directory
+/var/www/hashlog/bin/rails:9:in `<top (required)>'
+/var/www/hashlog/bin/spring:15:in `require'
+/var/www/hashlog/bin/spring:15:in `<top (required)>'
+bin/rails:3:in `load'
+bin/rails:3:in `<main>'
+Tasks: TOP => db:create
+(See full trace by running task with --trace)
+
+[aiandrox@ip-10-0-11-43 hashlog]$ mysql
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)
+
+[aiandrox@ip-10-0-11-43 hashlog]$ cat /etc/my.cnf
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+# Settings user and group are ignored when systemd is used.
+# If you need to run mysqld under a different user or group,
+# customize your systemd unit file for mariadb according to the
+# instructions in http://fedoraproject.org/wiki/Systemd
+
+[mysqld_safe]
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+
+#
+# include all files from the config directory
+#
+!includedir /etc/my.cnf.d
+
+[aiandrox@ip-10-0-11-43 hashlog]$ cd /var/lib
+
+[aiandrox@ip-10-0-11-43 lib]$ ls -a
+.             chrony    gssproxy       misc       postfix    stateless
+..            cloud     hibinit-agent  mlocate    rpcbind    systemd
+alternatives  dbus      initramfs      nfs        rpm        update-motd
+amazon        dhclient  logrotate      os-prober  rpm-state  xfsdump
+authconfig    games     machines       plymouth   rsyslog    yum
+
+[aiandrox@ip-10-0-11-43 lib]$ mkdir mysql
+mkdir: ディレクトリ `mysql' を作成できません: Permission denied
+
+[aiandrox@ip-10-0-11-43 lib]$ sudo mkdir mysql
+[aiandrox@ip-10-0-11-43 lib]$ cd mysql/
+[aiandrox@ip-10-0-11-43 mysql]$ sudo touch mysql.sock
+
+[aiandrox@ip-10-0-11-43 hashlog]$ mysql
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (13)
+
 ```
