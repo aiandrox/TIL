@@ -182,7 +182,7 @@ default: &default
 
 ### MySQLの設定
 
-```
+```shell
 [aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
 # ちなみに指定をしないとdevelopment, testができる
 
