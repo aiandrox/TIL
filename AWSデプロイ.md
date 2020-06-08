@@ -92,9 +92,7 @@ Installed successfully
 [username@ip-10-0-11-43 ~]$ nodebrew list
 v14.4.0
 current: none
-
-[username@ip-10-0-11-43 ~]$ nodebrew use v14.2.0  # ローカルに合わせた
-v14.2.0 is not installed
+# ローカルは14.2.0だからまあいいかな
 
 [username@ip-10-0-11-43 ~]$ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
 [username@ip-10-0-11-43 ~]$ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
