@@ -163,7 +163,7 @@ default: &default
   charset: utf8mb4
   collation: utf8mb4_unicode_ci
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: admin
+  username: admin # RDSのユーザーネーム
   password: # RDSのパスワード
   host: # RDSのエンドポイント ....rds.amazonaws.com
 ...
