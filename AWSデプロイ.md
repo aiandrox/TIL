@@ -183,7 +183,7 @@ default: &default
 ### MySQLの設定
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
+[username@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
 # ちなみに指定をしないとdevelopment, testができる
 
 Authentication plugin 'sha256_password' cannot be loaded: /usr/lib64/mysql/plugin/sha256_password.so: cannot open shared object file: No such file or directory
@@ -198,10 +198,10 @@ bin/rails:3:in `<main>'
 Tasks: TOP => db:create
 (See full trace by running task with --trace)
 
-[aiandrox@ip-10-0-11-43 hashlog]$ mysql
+[username@ip-10-0-11-43 hashlog]$ mysql
 ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2)
 
-[aiandrox@ip-10-0-11-43 hashlog]$ cat /etc/my.cnf
+[username@ip-10-0-11-43 hashlog]$ cat /etc/my.cnf
 [mysqld]
 datadir=/var/lib/mysql
 socket=/var/lib/mysql/mysql.sock
@@ -221,23 +221,23 @@ pid-file=/var/run/mariadb/mariadb.pid
 #
 !includedir /etc/my.cnf.d
 
-[aiandrox@ip-10-0-11-43 hashlog]$ cd /var/lib
+[username@ip-10-0-11-43 hashlog]$ cd /var/lib
 
-[aiandrox@ip-10-0-11-43 lib]$ ls -a
+[username@ip-10-0-11-43 lib]$ ls -a
 .             chrony    gssproxy       misc       postfix    stateless
 ..            cloud     hibinit-agent  mlocate    rpcbind    systemd
 alternatives  dbus      initramfs      nfs        rpm        update-motd
 amazon        dhclient  logrotate      os-prober  rpm-state  xfsdump
 authconfig    games     machines       plymouth   rsyslog    yum
 
-[aiandrox@ip-10-0-11-43 lib]$ mkdir mysql
+[username@ip-10-0-11-43 lib]$ mkdir mysql
 mkdir: ディレクトリ `mysql' を作成できません: Permission denied
 
-[aiandrox@ip-10-0-11-43 lib]$ sudo mkdir mysql
-[aiandrox@ip-10-0-11-43 lib]$ cd mysql/
-[aiandrox@ip-10-0-11-43 mysql]$ sudo touch mysql.sock
+[username@ip-10-0-11-43 lib]$ sudo mkdir mysql
+[username@ip-10-0-11-43 lib]$ cd mysql/
+[username@ip-10-0-11-43 mysql]$ sudo touch mysql.sock
 
-[aiandrox@ip-10-0-11-43 hashlog]$ mysql
+[username@ip-10-0-11-43 hashlog]$ mysql
 ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (13)
 
 ```
