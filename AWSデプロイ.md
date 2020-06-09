@@ -252,6 +252,9 @@ https://saton2.hatenablog.com/entry/2018/10/16/200616
 
 ### mysql-serverのインストール
 
+結論から言うと、ローカルにMySQLをインストールする必要はなかった。  
+gemから攻めるべし。
+
 ```shell
 [USERNAME@ip-10-0-11-43 hashlog]$ mysql.server start
 -bash: mysql.server: コマンドが見つかりません
@@ -260,6 +263,9 @@ https://saton2.hatenablog.com/entry/2018/10/16/200616
 ```
 
 https://dev.mysql.com/downloads/repo/yum/  
+https://qiita.com/ymasaoka/items/7dc131dc98ba10a39854  
+https://blog.apar.jp/linux/9868/
+
 Amazon Linux2はLinux7なので、そこに行って、`No thanks, just start my download.`のURLをコピー
 
 ```shell
@@ -444,7 +450,7 @@ production:
   database: hashlog_production
   username: hashlog  # 削除
   password: <%= ENV['HASHLOG_DATABASE_PASSWORD'] %>  # 削除
-# こっちが適用されてしまっていたので
+# defaultではなくこっちの設定が上書きされてしまっていたので削除
 
 [aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
 Created database 'hashlog_production'
@@ -465,6 +471,3 @@ https://qiita.com/sinsengumi/items/24d726ec6c761fc75cc9
 ```shell
 $ systemctl list-unit-files --type=service
 ```
-
-https://qiita.com/ymasaoka/items/7dc131dc98ba10a39854  
-https://blog.apar.jp/linux/9868/
