@@ -249,66 +249,6 @@ ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib
 
 https://saton2.hatenablog.com/entry/2018/10/16/200616
 
-### mariaDBをインストールしてアンインストールした
-
-```shell
-[USERNAME@ip-10-0-11-43 /]$ sudo yum install mariadb-server
-読み込んだプラグイン:extras_suggestions, langpacks, priorities, update-motd
-amzn2-core                                               | 3.7 kB     00:00
-amzn2extra-docker                                        | 3.0 kB     00:00
-amzn2extra-epel                                          | 1.7 kB     00:00
-epel/x86_64/metalink                                     | 8.2 kB     00:00
-192 packages excluded due to repository priority protections
-...
-インストール:
-  mariadb-server.x86_64 1:5.5.64-1.amzn2
-
-依存性関連をインストールしました:
-  perl-Compress-Raw-Bzip2.x86_64 0:2.061-3.amzn2.0.2
-  perl-Compress-Raw-Zlib.x86_64 1:2.061-4.amzn2.0.2
-  perl-DBD-MySQL.x86_64 0:4.023-6.amzn2
-  perl-DBI.x86_64 0:1.627-4.amzn2.0.2
-  perl-Data-Dumper.x86_64 0:2.145-3.amzn2.0.2
-  perl-IO-Compress.noarch 0:2.061-2.amzn2
-  perl-Net-Daemon.noarch 0:0.48-5.amzn2
-  perl-PlRPC.noarch 0:0.2020-14.amzn2
-
-完了しました!
-
-[USERNAME@ip-10-0-11-43 /]$ sudo systemctl start mariadb
-Job for mariadb.service failed because the control process exited with error code. See "systemctl status mariadb.service" and "journalctl -xe" for details.
-
-[USERNAME@ip-10-0-11-43 /]$ systemctl status mariadb.service
-● mariadb.service - MariaDB database server
-   Loaded: loaded (/usr/lib/systemd/system/mariadb.service; disabled; vendor preset: disabled)
-   Active: failed (Result: exit-code) since 月 2020-06-08 22:04:11 UTC; 19s ago
-  Process: 22582 ExecStartPre=/usr/libexec/mariadb-prepare-db-dir %n (code=exited, status=1/FAILURE)
-
-[USERNAME@ip-10-0-11-43 mysql]$ journalctl -xe
-
--- Logs begin at 月 2020-06-08 13:00:01 UTC, end at 月 2020-06-08 13:06:25 UTC.
- 6月 08 13:00:01 ip-10-0-11-43.ap-northeast-1.compute.internal su[12488]: pam_unix(su:auth): authentication failure; logname=ec2-user uid=1001 euid=0 tty=pts/1 ruser=USERNAME rhost=  user=ec2-user
- 6月 08 13:00:03 ip-10-0-11-43.ap-northeast-1.compute.internal su[12488]: FAILED SU (to ec2-user) ec2-user on pts/1
- 6月 08 13:06:25 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[12641]: Received disconnect from 202.208.137.136 port 62766:11: disconnected by user
- 6月 08 13:06:25 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[12641]: Disconnected from 202.208.137.136 port 62766
-
-[USERNAME@ip-10-0-11-43 ~]$ sudo yum remove mariadb-server
-
-[USERNAME@ip-10-0-11-43 ~]$ sudo yum remove mariadb-libs -y
-読み込んだプラグイン:extras_suggestions, langpacks, priorities, update-motd
-依存性の解決をしています
---> トランザクションの確認を実行しています。
----> パッケージ mariadb-libs.x86_64 1:5.5.64-1.amzn2 を 削除
-...
-削除しました:
-  mariadb-libs.x86_64 1:5.5.64-1.amzn2
-
-依存性の削除をしました:
-  mariadb.x86_64 1:5.5.64-1.amzn2        mariadb-devel.x86_64 1:5.5.64-1.amzn2
-  perl-DBD-MySQL.x86_64 0:4.023-6.amzn2  postfix.x86_64 2:2.10.1-6.amzn2.0.3
-
-完了しました!
-```
 
 ### mysql-serverのインストール
 
