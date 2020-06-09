@@ -5,7 +5,7 @@
 - Ruby 2.6.6
 - Rails 5.2.4.3
 - node 14.4.0
-- MySQL 8.0.19（EC2は 15.1 Distrib 5.5.64-MariaDB）
+- MySQL 8.0.19
 - Bundler 2.1.4
 
 `USERNAME`はEC2インスタンス内のユーザー名
@@ -294,7 +294,7 @@ Job for mariadb.service failed because the control process exited with error cod
 
 [USERNAME@ip-10-0-11-43 ~]$ sudo yum remove mariadb-server
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo yum remove mariadb-libs -y
+[USERNAME@ip-10-0-11-43 ~]$ sudo yum remove mariadb-libs -y
 読み込んだプラグイン:extras_suggestions, langpacks, priorities, update-motd
 依存性の解決をしています
 --> トランザクションの確認を実行しています。
@@ -313,7 +313,7 @@ Job for mariadb.service failed because the control process exited with error cod
 ### mysql-serverのインストール
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ mysql.server start
+[USERNAME@ip-10-0-11-43 hashlog]$ mysql.server start
 -bash: mysql.server: コマンドが見つかりません
 ```
 
@@ -321,22 +321,22 @@ https://dev.mysql.com/downloads/repo/yum/
 Amazon Linux2はLinux7なので、そこに行って、`No thanks, just start my download.`のURLをコピー
 
 ```shell
-[aiandrox@ip-10-0-11-43 ~]$ sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm  # コピーしたURL
+[USERNAME@ip-10-0-11-43 ~]$ sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm  # コピーしたURL
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo yum install -y mysql-community-server
+[USERNAME@ip-10-0-11-43 ~]$ sudo yum install -y mysql-community-server
 
-[aiandrox@ip-10-0-11-43 ~]$ mysqld --version
+[USERNAME@ip-10-0-11-43 ~]$ mysqld --version
 /usr/sbin/mysqld  Ver 8.0.20 for Linux on x86_64 (MySQL Community Server - GPL)
 
-[aiandrox@ip-10-0-11-43 ~]$ systemctl start mysqld.service
+[USERNAME@ip-10-0-11-43 ~]$ systemctl start mysqld.service
 Failed to start mysqld.service: The name org.freedesktop.PolicyKit1 was not provided by any .service files
 See system logs and 'systemctl status mysqld.service' for details.
 
-[aiandrox@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep mysql
+[USERNAME@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep mysql
 mysqld.service                                enabled
 mysqld@.service                               disabled
 
-[aiandrox@ip-10-0-11-43 ~]$ systemctl status mysqld.service
+[USERNAME@ip-10-0-11-43 ~]$ systemctl status mysqld.service
 ● mysqld.service - MySQL Server
    Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
    Active: inactive (dead)
