@@ -462,7 +462,119 @@ Created database 'hashlog_production'
 
 https://www.atmarkit.co.jp/flinux/rensai/linuxtips/a115makeerror.html
 
+## nginxの設定
 
+```shell
+[aiandrox@ip-10-0-11-43 ~]$ sudo amazon-linux-extras install nginx1.12
+[aiandrox@ip-10-0-11-43 ~]$ sudo service nginx start
+```
+
+パブリックIPアドレスにアクセスしてnginxの画面が出ていたらOK
+
+### nginxをrailsとつなげる
+
+```
+[aiandrox@ip-10-0-11-43 ~]$ cd /etc/nginx/conf.d
+[aiandrox@ip-10-0-11-43 conf.d]$ vim hashlog.conf  # ここは自由
+```
+
+`hashlog`はディレクトリ名
+
+```conf
+# log directory
+error_log  /var/www/hashlog/log/nginx.error.log;
+access_log /var/www/hashlog/log/nginx.access.log;
+# max body size
+client_max_body_size 2G;
+upstream hashlog {
+  # for UNIX domain socket setups
+  server unix:///var/www/hashlog/tmp/sockets/puma.sock fail_timeout=0;
+}
+server {
+  listen 80;
+  server_name 54.238.193.62; # 作成したEC2のIPアドレス
+  # nginx so increasing this is generally safe...
+  keepalive_timeout 5;
+  # path for static files
+  root /var/www/hashlog/public;
+  # page cache loading
+  try_files $uri/index.html $uri.html $uri @app;
+  location @app {
+    # HTTP headers
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://hashlog;
+  }
+  # Rails error pages
+  error_page 500 502 503 504 /500.html;
+  location = /500.html {
+      root /var/www/hashlog/public;
+  }
+}
+```
+
+## pumaの設定
+
+ローカルで`config/puma/production.rb`を作成
+
+```rb
+# config/puma/production.rb
+environment "production"
+
+# UNIX Socket
+tmp_path = "#{File.expand_path("../../..", __FILE__)}/tmp"
+bind "unix://#{tmp_path}/sockets/puma.sock"
+
+threads 3, 3
+workers 2
+preload_app!
+
+# daemonize
+pidfile "#{tmp_path}/pids/puma.pid"
+# stdout_redirect "#{tmp_path}/logs/puma.stdout.log", "#{tmp_path}/logs/puma.stderr.log", true
+
+# Allow puma to be restarted by `rails restart` command.
+plugin :tmp_restart
+```
+
+これをgit push & pull
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec puma -C config/puma/production.rb -e production -d
+[32456] Puma starting in cluster mode...
+[32456] * Version 3.12.6 (ruby 2.6.6-p146), codename: Llamas in Pajamas
+[32456] * Min threads: 3, max threads: 3
+[32456] * Environment: production
+[32456] * Process workers: 2
+[32456] * Preloading application
+[32456] * Listening on unix:///var/www/hashlog/tmp/sockets/puma.sock
+[32456] ! WARNING: Detected 2 Thread(s) started in app boot:
+[32456] ! #<Thread:0x0000000001fd4278@/home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/concurrent-ruby-1.1.6/lib/concurrent-ruby/concurrent/atomic/ruby_thread_local_var.rb:38 sleep_forever> - /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/concurrent-ruby-1.1.6/lib/concurrent-ruby/concurrent/atomic/ruby_thread_local_var.rb:40:in `pop'
+[32456] ! #<Thread:0x0000000003aa6718@/home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activerecord-5.2.4.3/lib/active_record/connection_adapters/abstract/connection_pool.rb:299 sleep> - /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activerecord-5.2.4.3/lib/active_record/connection_adapters/abstract/connection_pool.rb:301:in `sleep'
+[32456] * Daemonizing...
+# デーモンニングとなったらOK
+# 一度エラーが出たけど、指定のファイルを作ったらうまくいった
+```
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ sudo nginx -s stop
+nginx: [warn] server name "http://18.182.8.118/" has suspicious symbols in /etc/nginx/conf.d/hashlog.conf:12
+[aiandrox@ip-10-0-11-43 puma]$ sudo nginx -s stop
+nginx: [error] open() "/run/nginx.pid" failed (2: No such file or directory)
+
+[aiandrox@ip-10-0-11-43 puma]$ sudo touch /run/nginx.pid
+
+[aiandrox@ip-10-0-11-43 puma]$ sudo nginx -s stop
+nginx: [error] invalid PID number "" in "/run/nginx.pid"
+
+[aiandrox@ip-10-0-11-43 hashlog]$ sudo service nginx start
+Redirecting to /bin/systemctl start nginx.service
+```
+
+これで、IPアドレスにアクセスするとRailsのエラー画面が表示されるようになった。
+
+## Railsの設定
 
 ### デーモン管理のコマンド
 
