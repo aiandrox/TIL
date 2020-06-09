@@ -508,6 +508,8 @@ production:
 
 [aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
 Created database 'hashlog_production'
+
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:migrate RAILS_ENV=production
 ```
 
 やったぜ。
