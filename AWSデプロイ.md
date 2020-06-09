@@ -365,6 +365,80 @@ bin/rails:3:in `<main>'
 (See full trace by running task with --trace)
 ```
 
+`LoadError: libmysqlclient.so.18: cannot open shared object file: No such file or directory - /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/lib/mysql2/mysql2.so`を手がかりに調べてみる。
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ cd /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/lib/mysql2/
+
+[aiandrox@ip-10-0-11-43 mysql2]$ ls -a
+.   client.rb   em.rb     field.rb   result.rb     version.rb
+..  console.rb  error.rb  mysql2.so  statement.rb
+
+[aiandrox@ip-10-0-11-43 mysql2]$ mysql2.so
+-bash: mysql2.so: コマンドが見つかりません
+
+[aiandrox@ip-10-0-11-43 hashlog]$ gem uninstall mysql2
+Successfully uninstalled mysql2-0.5.3
+
+[aiandrox@ip-10-0-11-43 hashlog]$ gem install mysql2
+Fetching mysql2-0.5.3.gem
+Building native extensions. This could take a while...
+ERROR:  Error installing mysql2:
+	ERROR: Failed to build gem native extension.
+
+    current directory: /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/ext/mysql2
+/home/aiandrox/.rbenv/versions/2.6.6/bin/ruby -I /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/2.6.0 -r ./siteconf20200609-29709-qomkf7.rb extconf.rb
+checking for rb_absint_size()... yes
+checking for rb_absint_singlebit_p()... yes
+checking for rb_wait_for_single_fd()... yes
+checking for -lmysqlclient... no
+-----
+mysql client is missing. You may need to 'sudo apt-get install libmariadb-dev', 'sudo apt-get install libmysqlclient-dev' or 'sudo yum install mysql-devel', and try again.
+-----
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+	--with-opt-dir
+	--without-opt-dir
+	--with-opt-include
+	--without-opt-include=${opt-dir}/include
+	--with-opt-lib
+	--without-opt-lib=${opt-dir}/lib
+	--with-make-prog
+	--without-make-prog
+	--srcdir=.
+	--curdir
+	--ruby=/home/aiandrox/.rbenv/versions/2.6.6/bin/$(RUBY_BASE_NAME)
+	--with-mysql-dir
+	--without-mysql-dir
+	--with-mysql-include
+	--without-mysql-include=${mysql-dir}/include
+	--with-mysql-lib
+	--without-mysql-lib=${mysql-dir}/lib
+	--with-mysql-config
+	--without-mysql-config
+	--with-mysql-dir
+	--without-mysql-dir
+	--with-mysql-include
+	--without-mysql-include=${mysql-dir}/include
+	--with-mysql-lib
+	--without-mysql-lib=${mysql-dir}/lib
+	--with-mysqlclientlib
+	--without-mysqlclientlib
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-linux/2.6.0/mysql2-0.5.3/mkmf.log
+
+extconf failed, exit code 1
+
+Gem files will remain installed in /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3 for inspection.
+Results logged to /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-linux/2.6.0/mysql2-0.5.3/gem_make.out
+```
+
 
 ### デーモン管理のコマンド
 
