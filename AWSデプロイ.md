@@ -182,7 +182,7 @@ default: &default
 [USERNAME@ip-10-0-11-43 hashlog]$ bundle install
 ```
 
-### MySQLの設定
+## MySQLの設定
 
 ```shell
 [USERNAME@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
@@ -317,12 +317,11 @@ Job for mariadb.service failed because the control process exited with error cod
 -bash: mysql.server: コマンドが見つかりません
 ```
 
-
 https://dev.mysql.com/downloads/repo/yum/  
 Amazon Linux2はLinux7なので、そこに行って、`No thanks, just start my download.`のURLをコピー
 
 ```shell
-[aiandrox@ip-10-0-11-43 ~]$ sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+[aiandrox@ip-10-0-11-43 ~]$ sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm  # コピーしたURL
 
 [aiandrox@ip-10-0-11-43 ~]$ sudo yum install -y mysql-community-server
 
