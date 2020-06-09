@@ -365,29 +365,29 @@ bin/rails:3:in `<main>'
 (See full trace by running task with --trace)
 ```
 
-`LoadError: libmysqlclient.so.18: cannot open shared object file: No such file or directory - /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/lib/mysql2/mysql2.so`を手がかりに調べてみる。
+`LoadError: libmysqlclient.so.18: cannot open shared object file: No such file or directory - /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/lib/mysql2/mysql2.so`を手がかりに調べてみる。
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ cd /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/lib/mysql2/
+[USERNAME@ip-10-0-11-43 hashlog]$ cd /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/lib/mysql2/
 
-[aiandrox@ip-10-0-11-43 mysql2]$ ls -a
+[USERNAME@ip-10-0-11-43 mysql2]$ ls -a
 .   client.rb   em.rb     field.rb   result.rb     version.rb
 ..  console.rb  error.rb  mysql2.so  statement.rb
 
-[aiandrox@ip-10-0-11-43 mysql2]$ mysql2.so
+[USERNAME@ip-10-0-11-43 mysql2]$ mysql2.so
 -bash: mysql2.so: コマンドが見つかりません
 
-[aiandrox@ip-10-0-11-43 hashlog]$ gem uninstall mysql2
+[USERNAME@ip-10-0-11-43 hashlog]$ gem uninstall mysql2
 Successfully uninstalled mysql2-0.5.3
 
-[aiandrox@ip-10-0-11-43 hashlog]$ gem install mysql2
+[USERNAME@ip-10-0-11-43 hashlog]$ gem install mysql2
 Fetching mysql2-0.5.3.gem
 Building native extensions. This could take a while...
 ERROR:  Error installing mysql2:
 	ERROR: Failed to build gem native extension.
 
-    current directory: /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/ext/mysql2
-/home/aiandrox/.rbenv/versions/2.6.6/bin/ruby -I /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/2.6.0 -r ./siteconf20200609-29709-qomkf7.rb extconf.rb
+    current directory: /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/ext/mysql2
+/home/USERNAME/.rbenv/versions/2.6.6/bin/ruby -I /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/2.6.0 -r ./siteconf20200609-29709-qomkf7.rb extconf.rb
 checking for rb_absint_size()... yes
 checking for rb_absint_singlebit_p()... yes
 checking for rb_wait_for_single_fd()... yes
@@ -411,7 +411,7 @@ Provided configuration options:
 	--without-make-prog
 	--srcdir=.
 	--curdir
-	--ruby=/home/aiandrox/.rbenv/versions/2.6.6/bin/$(RUBY_BASE_NAME)
+	--ruby=/home/USERNAME/.rbenv/versions/2.6.6/bin/$(RUBY_BASE_NAME)
 	--with-mysql-dir
 	--without-mysql-dir
 	--with-mysql-include
@@ -431,13 +431,77 @@ Provided configuration options:
 
 To see why this extension failed to compile, please check the mkmf.log which can be found here:
 
-  /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-linux/2.6.0/mysql2-0.5.3/mkmf.log
+  /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-linux/2.6.0/mysql2-0.5.3/mkmf.log
 
 extconf failed, exit code 1
 
-Gem files will remain installed in /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3 for inspection.
-Results logged to /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-linux/2.6.0/mysql2-0.5.3/gem_make.out
+Gem files will remain installed in /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3 for inspection.
+Results logged to /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-linux/2.6.0/mysql2-0.5.3/gem_make.out
 ```
+
+> -----
+mysql client is missing. You may need to 'sudo apt-get install libmariadb-dev', 'sudo apt-get install libmysqlclient-dev' or 'sudo yum install mysql-devel', and try again.
+-----
+
+とのことなので、mysql-develをインストールしてみる。
+
+
+```shell
+[USERNAME@ip-10-0-11-43 ~]$ sudo yum install mysql-devel
+
+[USERNAME@ip-10-0-11-43 ~]$ gem install mysql2
+Building native extensions. This could take a while...
+Successfully installed mysql2-0.5.3
+Parsing documentation for mysql2-0.5.3
+Installing ri documentation for mysql2-0.5.3
+Done installing documentation for mysql2 after 0 seconds
+1 gem installed
+
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
+Access denied for user 'hashlog'@'10.0.11.43' (using password: NO)
+Couldn't create 'hashlog_production' database. Please check your configuration.
+rails aborted!
+Mysql2::Error::ConnectionError: Access denied for user 'hashlog'@'10.0.11.43' (using password: NO)
+/var/www/hashlog/bin/rails:9:in `<top (required)>'
+/var/www/hashlog/bin/spring:15:in `require'
+/var/www/hashlog/bin/spring:15:in `<top (required)>'
+bin/rails:3:in `load'
+bin/rails:3:in `<main>'
+Tasks: TOP => db:create
+(See full trace by running task with --trace)
+```
+
+```shell
+[USERNAME@ip-10-0-11-43 mysql2-0.5.3]$ cat /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/extensions/x86_64-linux/2.6.0/mysql2-0.5.3/mkmf.log
+
+...
+"gcc -o conftest -I/home/USERNAME/.rbenv/versions/2.6.6/include/ruby-2.6.0/x86_64-linux -I/home/USERNAME/.rbenv/versions/2.6.6/include/ruby-2.6.0/ruby/backward -I/home/USERNAME/.rbenv/versions/2.6.6/include/ruby-2.6.0 -I. -I/usr/local/include -I/home/USERNAME/.rbenv/versions/2.6.6/include    -O3 -ggdb3 -Wall -Wextra -Wdeclaration-after-statement -Wdeprecated-declarations -Wduplicated-cond -Wimplicit-function-declaration -Wimplicit-int -Wmisleading-indentation -Wpointer-arith -Wrestrict -Wwrite-strings -Wimplicit-fallthrough=0 -Wmissing-noreturn -Wno-cast-function-type -Wno-constant-logical-operand -Wno-long-long -Wno-missing-field-initializers -Wno-overlength-strings -Wno-packed-bitfield-compat -Wno-parentheses-equality -Wno-self-assign -Wno-tautological-compare -Wno-unused-parameter -Wno-unused-value -Wsuggest-attribute=format -Wsuggest-attribute=noreturn -Wunused-variable  -fPIC conftest.c  -L. -L/home/USERNAME/.rbenv/versions/2.6.6/lib -Wl,-rpath,/home/USERNAME/.rbenv/versions/2.6.6/lib -L/usr/local/lib -Wl,-rpath,/usr/local/lib -L/usr/local/lib/mysql -Wl,-rpath,/usr/local/lib/mysql -L. -L/home/USERNAME/.rbenv/versions/2.6.6/lib  -fstack-protector-strong -rdynamic -Wl,-export-dynamic     -Wl,-rpath,/home/USERNAME/.rbenv/versions/2.6.6/lib -L/home/USERNAME/.rbenv/versions/2.6.6/lib -lruby -lmysqlclient  -lm   -lc"
+/usr/bin/ld: -lmysqlclient が見つかりません
+collect2: エラー: ld はステータス 1 で終了しました
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2:
+ 3: /*top*/
+ 4: extern int t(void);
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     int (* volatile tp)(void)=(int (*)(void))&t;
+ 9:     printf("%d", (*tp)());
+10:   }
+11:
+12:   return 0;
+13: }
+14:
+15: int t(void) { ; return 0; }
+/* end */
+
+--------------------
+```
+
+https://www.atmarkit.co.jp/flinux/rensai/linuxtips/a115makeerror.html
+
 
 
 ### デーモン管理のコマンド
