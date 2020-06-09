@@ -334,7 +334,7 @@ Amazon Linux2はLinux7なので、そこに行って、`No thanks, just start my
 Failed to start mysqld.service: The name org.freedesktop.PolicyKit1 was not provided by any .service files
 See system logs and 'systemctl status mysqld.service' for details.
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo systemctl start mysqld.service
+[USERNAME@ip-10-0-11-43 ~]$ sudo systemctl start mysqld.service
 Job for mysqld.service failed because the control process exited with error code. See "systemctl status mysqld.service" and "journalctl -xe" for details.
 
 [USERNAME@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep mysql
@@ -348,9 +348,21 @@ mysqld@.service                               disabled
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
 
-[aiandrox@ip-10-0-11-43 ~]$ journalctl -xe
+[USERNAME@ip-10-0-11-43 ~]$ journalctl -xe
  6月 09 03:42:06 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[27274]: Received disconnect from 202.208.137.136 port 63749:11: disconnected by user
  6月 09 03:42:06 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[27274]: Disconnected from 202.208.137.136 port 63749
+
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production  # なんでかわからんけどエラー文が変わっている
+rails aborted!
+LoadError: libmysqlclient.so.18: cannot open shared object file: No such file or directory - /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/mysql2-0.5.3/lib/mysql2/mysql2.so
+/var/www/hashlog/config/application.rb:18:in `<main>'
+/var/www/hashlog/Rakefile:4:in `<main>'
+/var/www/hashlog/bin/rails:9:in `<top (required)>'
+/var/www/hashlog/bin/spring:15:in `require'
+/var/www/hashlog/bin/spring:15:in `<top (required)>'
+bin/rails:3:in `load'
+bin/rails:3:in `<main>'
+(See full trace by running task with --trace)
 ```
 
 
