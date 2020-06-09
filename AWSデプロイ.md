@@ -315,6 +315,8 @@ Job for mariadb.service failed because the control process exited with error cod
 ```shell
 [USERNAME@ip-10-0-11-43 hashlog]$ mysql.server start
 -bash: mysql.server: コマンドが見つかりません
+[USERNAME@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep mysql
+# なにもない
 ```
 
 https://dev.mysql.com/downloads/repo/yum/  
