@@ -349,9 +349,11 @@ mysqld@.service                               disabled
 
 ### デーモン管理のコマンド
 
+https://qiita.com/sinsengumi/items/24d726ec6c761fc75cc9
+
 ```shell
 $ systemctl list-unit-files --type=service
 ```
 
-https://qiita.com/ymasaoka/items/7dc131dc98ba10a39854
+https://qiita.com/ymasaoka/items/7dc131dc98ba10a39854  
 https://blog.apar.jp/linux/9868/
