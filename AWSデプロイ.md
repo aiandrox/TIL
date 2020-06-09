@@ -334,6 +334,9 @@ Amazon Linux2はLinux7なので、そこに行って、`No thanks, just start my
 Failed to start mysqld.service: The name org.freedesktop.PolicyKit1 was not provided by any .service files
 See system logs and 'systemctl status mysqld.service' for details.
 
+[aiandrox@ip-10-0-11-43 ~]$ sudo systemctl start mysqld.service
+Job for mysqld.service failed because the control process exited with error code. See "systemctl status mysqld.service" and "journalctl -xe" for details.
+
 [USERNAME@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep mysql
 mysqld.service                                enabled
 mysqld@.service                               disabled
@@ -344,6 +347,10 @@ mysqld@.service                               disabled
    Active: inactive (dead)
      Docs: man:mysqld(8)
            http://dev.mysql.com/doc/refman/en/using-systemd.html
+
+[aiandrox@ip-10-0-11-43 ~]$ journalctl -xe
+ 6月 09 03:42:06 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[27274]: Received disconnect from 202.208.137.136 port 63749:11: disconnected by user
+ 6月 09 03:42:06 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[27274]: Disconnected from 202.208.137.136 port 63749
 ```
 
 
