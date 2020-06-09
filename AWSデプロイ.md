@@ -245,7 +245,13 @@ ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib
 [USERNAME@ip-10-0-11-43 mysql]$ sudo chmod 777 /var/lib/mysql/mysql.sock
 [USERNAME@ip-10-0-11-43 mysql]$ mysql
 ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (111)
+```
 
+https://saton2.hatenablog.com/entry/2018/10/16/200616
+
+### mariaDBをインストールしてアンインストールした
+
+```shell
 [USERNAME@ip-10-0-11-43 /]$ sudo yum install mariadb-server
 読み込んだプラグイン:extras_suggestions, langpacks, priorities, update-motd
 amzn2-core                                               | 3.7 kB     00:00
@@ -286,6 +292,65 @@ Job for mariadb.service failed because the control process exited with error cod
  6月 08 13:06:25 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[12641]: Received disconnect from 202.208.137.136 port 62766:11: disconnected by user
  6月 08 13:06:25 ip-10-0-11-43.ap-northeast-1.compute.internal sshd[12641]: Disconnected from 202.208.137.136 port 62766
 
+[USERNAME@ip-10-0-11-43 ~]$ sudo yum remove mariadb-server
+
+[aiandrox@ip-10-0-11-43 ~]$ sudo yum remove mariadb-libs -y
+読み込んだプラグイン:extras_suggestions, langpacks, priorities, update-motd
+依存性の解決をしています
+--> トランザクションの確認を実行しています。
+---> パッケージ mariadb-libs.x86_64 1:5.5.64-1.amzn2 を 削除
+...
+削除しました:
+  mariadb-libs.x86_64 1:5.5.64-1.amzn2
+
+依存性の削除をしました:
+  mariadb.x86_64 1:5.5.64-1.amzn2        mariadb-devel.x86_64 1:5.5.64-1.amzn2
+  perl-DBD-MySQL.x86_64 0:4.023-6.amzn2  postfix.x86_64 2:2.10.1-6.amzn2.0.3
+
+完了しました!
 ```
 
-https://saton2.hatenablog.com/entry/2018/10/16/200616
+### mysql-serverのインストール
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ mysql.server start
+-bash: mysql.server: コマンドが見つかりません
+```
+
+
+https://dev.mysql.com/downloads/repo/yum/  
+Amazon Linux2はLinux7なので、そこに行って、`No thanks, just start my download.`のURLをコピー
+
+```shell
+[aiandrox@ip-10-0-11-43 ~]$ sudo yum localinstall -y https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+
+[aiandrox@ip-10-0-11-43 ~]$ sudo yum install -y mysql-community-server
+
+[aiandrox@ip-10-0-11-43 ~]$ mysqld --version
+/usr/sbin/mysqld  Ver 8.0.20 for Linux on x86_64 (MySQL Community Server - GPL)
+
+[aiandrox@ip-10-0-11-43 ~]$ systemctl start mysqld.service
+Failed to start mysqld.service: The name org.freedesktop.PolicyKit1 was not provided by any .service files
+See system logs and 'systemctl status mysqld.service' for details.
+
+[aiandrox@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep mysql
+mysqld.service                                enabled
+mysqld@.service                               disabled
+
+[aiandrox@ip-10-0-11-43 ~]$ systemctl status mysqld.service
+● mysqld.service - MySQL Server
+   Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:mysqld(8)
+           http://dev.mysql.com/doc/refman/en/using-systemd.html
+```
+
+
+### デーモン管理のコマンド
+
+```shell
+$ systemctl list-unit-files --type=service
+```
+
+https://qiita.com/ymasaoka/items/7dc131dc98ba10a39854
+https://blog.apar.jp/linux/9868/
