@@ -496,8 +496,21 @@ bin/rails:3:in `load'
 bin/rails:3:in `<main>'
 Tasks: TOP => db:create
 (See full trace by running task with --trace)
+
+[aiandrox@ip-10-0-11-43 hashlog]$ vim config/database.yml
+...
+production:
+  <<: *default
+  database: hashlog_production
+  username: hashlog  # 削除
+  password: <%= ENV['HASHLOG_DATABASE_PASSWORD'] %>  # 削除
+# こっちが適用されてしまっていたので
+
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
+Created database 'hashlog_production'
 ```
 
+やったぜ。
 
 https://www.atmarkit.co.jp/flinux/rensai/linuxtips/a115makeerror.html
 
