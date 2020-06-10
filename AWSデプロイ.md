@@ -493,6 +493,8 @@ upstream hashlog {
 server {
   listen 80;
   server_name 54.238.193.62; # 作成したEC2のIPアドレス
+#  server_name 3.115.59.106; # IPアドレス
+#  return 301 https://hashlog.work; # リダイレクト先
   # nginx so increasing this is generally safe...
   keepalive_timeout 5;
   # path for static files
