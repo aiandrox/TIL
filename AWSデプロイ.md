@@ -637,7 +637,7 @@ redis.service                                 enabled
 [USERNAME@ip-10-0-11-43 ~]$ sudo systemctl start redis
 ```
 
-## nodeのインストール
+### nodeのインストール
 
 ```shell
 [USERNAME@ip-10-0-11-43 log]$ cd ~
@@ -726,7 +726,7 @@ Compilation failed:
 EntryModuleNotFoundError: Entry module not found: Error: Can't resolve 'eslint-loader' in '/var/www/hashlog'
 ```
 
-あれ待って`bin/webpack`？？→同じ事っぽい
+あれ待って`bin/webpack`？？→同じ事っぽい  
 https://numb86-tech.hatenablog.com/entry/2019/01/09/215714
 
 ```shell
@@ -755,6 +755,64 @@ ERROR in Entry module not found: Error: Can't resolve 'eslint-loader' in '/var/w
 {
   "entrypoints": {}
 }
+```
+
+### es-lintのインストール
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ yarn run eslint --ext .vue --ext .js app/javascript
+yarn run v1.22.4
+$ /var/www/hashlog/node_modules/.bin/eslint --ext .vue --ext .js app/javascript
+
+Oops! Something went wrong! :(
+
+ESLint: 6.8.0.
+
+ESLint couldn't find the plugin "eslint-plugin-vue".
+
+(The package "eslint-plugin-vue" was not found when loaded as a Node module from the directory "/var/www/hashlog".)
+
+It's likely that the plugin isn't installed correctly. Try reinstalling by running the following:
+
+    npm install eslint-plugin-vue@latest --save-dev
+
+The plugin "eslint-plugin-vue" was referenced from the config file in ".eslintrc.json".
+
+If you still can't figure out the problem, please stop by https://gitter.im/eslint/eslint to chat with the team.
+
+error Command failed with exit code 2.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+[aiandrox@ip-10-0-11-43 hashlog]$ yarn add eslint-plugin-vue@latest --save-dev
+yarn add v1.22.4
+[1/4] Resolving packages...
+[2/4] Fetching packages...
+...
+success Saved 1 new dependency.
+info Direct dependencies
+└─ eslint-plugin-vue@6.2.2
+info All dependencies
+└─ eslint-plugin-vue@6.2.2
+Done in 6.50s.
+```
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ bin/webpack -w
+# 黄色いwarnだけで通ったあああああ
+```
+
+## その他独自の設定
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ rake db:seed_fu RAILS_ENV=production
+
+
+```
+
+
+## rails c
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ RAILS_ENV=production rails c
 ```
 
 ## .bash_profile
