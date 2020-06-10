@@ -588,6 +588,7 @@ Redirecting to /bin/systemctl start nginx.service
 2020/06/09 21:37:33 [error] 3681#0: *7 connect() to unix:///var/www/hashlog/tmp/sockets/puma.sock failed (111: Connection refused) while connecting to upstream, client: 202.208.137.136, server: 18.182.8.118, request: "GET / HTTP/1.1", upstream: "http://unix:///var/www/hashlog/tmp/sockets/puma.sock:/", host: "18.182.8.118"
 ```
 
+
 ## Railsの設定
 
 ### 本番環境のタイムゾーン
@@ -660,6 +661,8 @@ Now using node v14.2.0 (npm v6.14.4)
 6.14.4
 ```
 
+### yarnのインストール
+
 ```shell
 [aiandrox@ip-10-0-11-43 ~]$ npm install yarn -g
 /home/aiandrox/.nvm/versions/node/v14.2.0/bin/yarn -> /home/aiandrox/.nvm/versions/node/v14.2.0/lib/node_modules/yarn/bin/yarn.js
@@ -670,6 +673,45 @@ added 1 package in 0.387s
 [aiandrox@ip-10-0-11-43 ~]$ yarn --version  # 結果的にローカルと同じになった
 1.22.4
 ```
+
+### プリコンパイル
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails assets:precompile RAILS_ENV=production
+yarn install v1.22.4
+[1/4] Resolving packages...
+[2/4] Fetching packages...
+...
+[4/4] Building fresh packages...
+Done in 158.24s.
+rails aborted!
+LoadError: cannot load such file -- uglifier
+/var/www/hashlog/bin/rails:9:in `<top (required)>'
+/var/www/hashlog/bin/spring:15:in `require'
+/var/www/hashlog/bin/spring:15:in `<top (required)>'
+bin/rails:3:in `load'
+bin/rails:3:in `<main>'
+
+Caused by:
+Bootsnap::LoadPathCache::FallbackScan:
+
+Tasks: TOP => assets:precompile
+(See full trace by running task with --trace)
+```
+
+`config/environments/production.rb`の`config.assets.js_compressor = :uglifier`をコメントアウト（webpacker以降のときにgemファイルを消していたがこれは消していなかった）  
+ついでに`config.consider_all_requests_local = true`にしておく
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec puma -C config/puma/production.rb -e production -d
+[aiandrox@ip-10-0-11-43 hashlog]$ sudo nginx -s stop
+[aiandrox@ip-10-0-11-43 hashlog]$ sudo service nginx start
+```
+
+でアクセス
+
+https://i.gyazo.com/bd189a14dc54ca8d1ad2cd900e2e2524.png
+
 
 
 ### デーモン管理のコマンド
