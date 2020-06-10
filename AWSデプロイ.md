@@ -443,7 +443,7 @@ bin/rails:3:in `<main>'
 Tasks: TOP => db:create
 (See full trace by running task with --trace)
 
-[aiandrox@ip-10-0-11-43 hashlog]$ vim config/database.yml
+[USERNAME@ip-10-0-11-43 hashlog]$ vim config/database.yml
 ...
 production:
   <<: *default
@@ -452,10 +452,10 @@ production:
   password: <%= ENV['HASHLOG_DATABASE_PASSWORD'] %>  # 削除
 # defaultではなくこっちの設定が上書きされてしまっていたので削除
 
-[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec rails db:create RAILS_ENV=production
 Created database 'hashlog_production'
 
-[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails db:migrate RAILS_ENV=production
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec rails db:migrate RAILS_ENV=production
 ```
 
 やったぜ。
@@ -465,8 +465,8 @@ https://www.atmarkit.co.jp/flinux/rensai/linuxtips/a115makeerror.html
 ## nginxの設定
 
 ```shell
-[aiandrox@ip-10-0-11-43 ~]$ sudo amazon-linux-extras install nginx1.12
-[aiandrox@ip-10-0-11-43 ~]$ sudo service nginx start
+[USERNAME@ip-10-0-11-43 ~]$ sudo amazon-linux-extras install nginx1.12
+[USERNAME@ip-10-0-11-43 ~]$ sudo service nginx start
 ```
 
 パブリックIPアドレスにアクセスしてnginxの画面が出ていたらOK
@@ -474,8 +474,8 @@ https://www.atmarkit.co.jp/flinux/rensai/linuxtips/a115makeerror.html
 ### nginxをrailsとつなげる
 
 ```
-[aiandrox@ip-10-0-11-43 ~]$ cd /etc/nginx/conf.d
-[aiandrox@ip-10-0-11-43 conf.d]$ vim hashlog.conf  # ここは自由
+[USERNAME@ip-10-0-11-43 ~]$ cd /etc/nginx/conf.d
+[USERNAME@ip-10-0-11-43 conf.d]$ vim hashlog.conf  # ここは自由
 ```
 
 `hashlog`はディレクトリ名
@@ -515,11 +515,11 @@ server {
 ```
 
 ```shell
-[aiandrox@ip-10-0-11-43 ~]$ sudo nginx -t
+[USERNAME@ip-10-0-11-43 ~]$ sudo nginx -t
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo service nginx start
+[USERNAME@ip-10-0-11-43 ~]$ sudo service nginx start
 ```
 
 ## pumaの設定
@@ -549,7 +549,7 @@ plugin :tmp_restart
 これをgit push & pull
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec puma -C config/puma/production.rb -e production -d
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec puma -C config/puma/production.rb -e production -d
 [32456] Puma starting in cluster mode...
 [32456] * Version 3.12.6 (ruby 2.6.6-p146), codename: Llamas in Pajamas
 [32456] * Min threads: 3, max threads: 3
@@ -558,32 +558,32 @@ plugin :tmp_restart
 [32456] * Preloading application
 [32456] * Listening on unix:///var/www/hashlog/tmp/sockets/puma.sock
 [32456] ! WARNING: Detected 2 Thread(s) started in app boot:
-[32456] ! #<Thread:0x0000000001fd4278@/home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/concurrent-ruby-1.1.6/lib/concurrent-ruby/concurrent/atomic/ruby_thread_local_var.rb:38 sleep_forever> - /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/concurrent-ruby-1.1.6/lib/concurrent-ruby/concurrent/atomic/ruby_thread_local_var.rb:40:in `pop'
-[32456] ! #<Thread:0x0000000003aa6718@/home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activerecord-5.2.4.3/lib/active_record/connection_adapters/abstract/connection_pool.rb:299 sleep> - /home/aiandrox/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activerecord-5.2.4.3/lib/active_record/connection_adapters/abstract/connection_pool.rb:301:in `sleep'
+[32456] ! #<Thread:0x0000000001fd4278@/home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/concurrent-ruby-1.1.6/lib/concurrent-ruby/concurrent/atomic/ruby_thread_local_var.rb:38 sleep_forever> - /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/concurrent-ruby-1.1.6/lib/concurrent-ruby/concurrent/atomic/ruby_thread_local_var.rb:40:in `pop'
+[32456] ! #<Thread:0x0000000003aa6718@/home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activerecord-5.2.4.3/lib/active_record/connection_adapters/abstract/connection_pool.rb:299 sleep> - /home/USERNAME/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/activerecord-5.2.4.3/lib/active_record/connection_adapters/abstract/connection_pool.rb:301:in `sleep'
 [32456] * Daemonizing...
 # デーモンニングとなったらOK
 # 一度エラーが出たけど、指定のファイルを作ったらうまくいった
 ```
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ sudo nginx -s stop
+[USERNAME@ip-10-0-11-43 hashlog]$ sudo nginx -s stop
 nginx: [warn] server name "http://18.182.8.118/" has suspicious symbols in /etc/nginx/conf.d/hashlog.conf:12
-[aiandrox@ip-10-0-11-43 puma]$ sudo nginx -s stop
+[USERNAME@ip-10-0-11-43 puma]$ sudo nginx -s stop
 nginx: [error] open() "/run/nginx.pid" failed (2: No such file or directory)
 
-[aiandrox@ip-10-0-11-43 puma]$ sudo touch /run/nginx.pid
+[USERNAME@ip-10-0-11-43 puma]$ sudo touch /run/nginx.pid
 
-[aiandrox@ip-10-0-11-43 puma]$ sudo nginx -s stop
+[USERNAME@ip-10-0-11-43 puma]$ sudo nginx -s stop
 nginx: [error] invalid PID number "" in "/run/nginx.pid"
 
-[aiandrox@ip-10-0-11-43 hashlog]$ sudo service nginx start
+[USERNAME@ip-10-0-11-43 hashlog]$ sudo service nginx start
 Redirecting to /bin/systemctl start nginx.service
 ```
 
 これで、IPアドレスにアクセスするとRailsのエラー画面が表示されるようになった。
 
 ```
-[aiandrox@ip-10-0-11-43 hashlog]$ vim log/nginx.error.log
+[USERNAME@ip-10-0-11-43 hashlog]$ vim log/nginx.error.log
 ...
 2020/06/09 21:37:33 [error] 3681#0: *7 connect() to unix:///var/www/hashlog/tmp/sockets/puma.sock failed (111: Connection refused) while connecting to upstream, client: 202.208.137.136, server: 18.182.8.118, request: "GET / HTTP/1.1", upstream: "http://unix:///var/www/hashlog/tmp/sockets/puma.sock:/", host: "18.182.8.118"
 ```
@@ -594,21 +594,21 @@ Redirecting to /bin/systemctl start nginx.service
 ### 本番環境のタイムゾーン
 
 ```shell
-[aiandrox@ip-10-0-11-43 ~]$ date
+[USERNAME@ip-10-0-11-43 ~]$ date
 2020年  6月  9日 火曜日 12:18:55 UTC
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+[USERNAME@ip-10-0-11-43 ~]$ sudo ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-[aiandrox@ip-10-0-11-43 ~]$ date
+[USERNAME@ip-10-0-11-43 ~]$ date
 2020年  6月  9日 火曜日 21:19:09 JST
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo vi /etc/sysconfig/clock
+[USERNAME@ip-10-0-11-43 ~]$ sudo vi /etc/sysconfig/clock
 
 # 以下の内容を変更
 ZONE="Asia/Tokyo"
 UTC= true
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo reboot
+[USERNAME@ip-10-0-11-43 ~]$ sudo reboot
 ```
 
 https://qiita.com/Rubyist_SOTA/items/b0b5b7462b9af6b7a7bf
@@ -616,40 +616,40 @@ https://qiita.com/Rubyist_SOTA/items/b0b5b7462b9af6b7a7bf
 ### redisのインストール
 
 ```shell
-[aiandrox@ip-10-0-11-43 ~]$ sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+[USERNAME@ip-10-0-11-43 ~]$ sudo rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo yum install --enablerepo=epel,remi redis
+[USERNAME@ip-10-0-11-43 ~]$ sudo yum install --enablerepo=epel,remi redis
 
-[aiandrox@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep redis
+[USERNAME@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep redis
 redis-sentinel.service                        disabled
 redis.service                                 disabled
 
-[aiandrox@ip-10-0-11-43 ~]$ systemctl enable redis
+[USERNAME@ip-10-0-11-43 ~]$ systemctl enable redis
 Failed to execute operation: The name org.freedesktop.PolicyKit1 was not provided by any .service files
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo systemctl enable redis
+[USERNAME@ip-10-0-11-43 ~]$ sudo systemctl enable redis
 Created symlink from /etc/systemd/system/multi-user.target.wants/redis.service to /usr/lib/systemd/system/redis.service.
 
-[aiandrox@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep redis
+[USERNAME@ip-10-0-11-43 ~]$ systemctl list-unit-files --type=service | grep redis
 redis-sentinel.service                        disabled
 redis.service                                 enabled
 
-[aiandrox@ip-10-0-11-43 ~]$ sudo systemctl start redis
+[USERNAME@ip-10-0-11-43 ~]$ sudo systemctl start redis
 ```
 
 ## nodeのインストール
 
 ```shell
-[aiandrox@ip-10-0-11-43 log]$ cd ~
-[aiandrox@ip-10-0-11-43 ~]$ git clone https://github.com/creationix/nvm.git ~/.nvm
-[aiandrox@ip-10-0-11-43 ~]$ source ~/.nvm/nvm.sh
-[aiandrox@ip-10-0-11-43 ~]$ vim .bash_profile
+[USERNAME@ip-10-0-11-43 log]$ cd ~
+[USERNAME@ip-10-0-11-43 ~]$ git clone https://github.com/creationix/nvm.git ~/.nvm
+[USERNAME@ip-10-0-11-43 ~]$ source ~/.nvm/nvm.sh
+[USERNAME@ip-10-0-11-43 ~]$ vim .bash_profile
 # 以下を追加
 if [ -f ~/.nvm/nvm.sh ]; then
         . ~/.nvm/nvm.sh
 fi
 
-[aiandrox@ip-10-0-11-43 ~]$ nvm install 14.2.0  # ローカルと合わせた
+[USERNAME@ip-10-0-11-43 ~]$ nvm install 14.2.0  # ローカルと合わせた
 Downloading and installing node v14.2.0...
 Downloading https://nodejs.org/dist/v14.2.0/node-v14.2.0-linux-x64.tar.xz...
 ########################################################################################################################################################################### 100.0%
@@ -657,27 +657,27 @@ Computing checksum with sha256sum
 Checksums matched!
 Now using node v14.2.0 (npm v6.14.4)
 
-[aiandrox@ip-10-0-11-43 ~]$ npm --version
+[USERNAME@ip-10-0-11-43 ~]$ npm --version
 6.14.4
 ```
 
 ### yarnのインストール
 
 ```shell
-[aiandrox@ip-10-0-11-43 ~]$ npm install yarn -g
-/home/aiandrox/.nvm/versions/node/v14.2.0/bin/yarn -> /home/aiandrox/.nvm/versions/node/v14.2.0/lib/node_modules/yarn/bin/yarn.js
-/home/aiandrox/.nvm/versions/node/v14.2.0/bin/yarnpkg -> /home/aiandrox/.nvm/versions/node/v14.2.0/lib/node_modules/yarn/bin/yarn.js
+[USERNAME@ip-10-0-11-43 ~]$ npm install yarn -g
+/home/USERNAME/.nvm/versions/node/v14.2.0/bin/yarn -> /home/USERNAME/.nvm/versions/node/v14.2.0/lib/node_modules/yarn/bin/yarn.js
+/home/USERNAME/.nvm/versions/node/v14.2.0/bin/yarnpkg -> /home/USERNAME/.nvm/versions/node/v14.2.0/lib/node_modules/yarn/bin/yarn.js
 + yarn@1.22.4
 added 1 package in 0.387s
 
-[aiandrox@ip-10-0-11-43 ~]$ yarn --version  # 結果的にローカルと同じになった
+[USERNAME@ip-10-0-11-43 ~]$ yarn --version  # 結果的にローカルと同じになった
 1.22.4
 ```
 
 ### プリコンパイル
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec rails assets:precompile RAILS_ENV=production
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec rails assets:precompile RAILS_ENV=production
 yarn install v1.22.4
 [1/4] Resolving packages...
 [2/4] Fetching packages...
@@ -703,16 +703,94 @@ Tasks: TOP => assets:precompile
 ついでに`config.consider_all_requests_local = true`にしておく
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec puma -C config/puma/production.rb -e production -d
-[aiandrox@ip-10-0-11-43 hashlog]$ sudo nginx -s stop
-[aiandrox@ip-10-0-11-43 hashlog]$ sudo service nginx start
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec puma -C config/puma/production.rb -e production -d
+[USERNAME@ip-10-0-11-43 hashlog]$ sudo nginx -s stop
+[USERNAME@ip-10-0-11-43 hashlog]$ sudo service nginx start
 ```
 
 でアクセス
 
-https://i.gyazo.com/bd189a14dc54ca8d1ad2cd900e2e2524.png
+[![Image from Gyazo](https://i.gyazo.com/bd189a14dc54ca8d1ad2cd900e2e2524.png)](https://gyazo.com/bd189a14dc54ca8d1ad2cd900e2e2524)
+やっぱりプリコンパイルができていない。
 
+### プリコンパイル
 
+```shell
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec rails assets:precompile RAILS_ENV=production
+yarn install v1.22.4
+[1/4] Resolving packages...
+success Already up-to-date.
+Done in 1.02s.
+Compiling...
+Compilation failed:
+EntryModuleNotFoundError: Entry module not found: Error: Can't resolve 'eslint-loader' in '/var/www/hashlog'
+```
+
+あれ待って`bin/webpack`？？→同じ事っぽい
+https://numb86-tech.hatenablog.com/entry/2019/01/09/215714
+
+```shell
+[USERNAME@ip-10-0-11-43 hashlog]$ bin/webpack -w
+
+webpack is watching the files…
+
+Insufficient number of arguments or no entry found.
+Alternatively, run 'webpack(-cli) --help' for usage info.
+
+Hash: a20a912099ac1916eb01
+Version: webpack 4.42.1
+Time: 58ms
+Built at: 2020/06/10 21:23:33
+        Asset      Size  Chunks             Chunk Names
+manifest.json  23 bytes          [emitted]
+
+ERROR in Entry module not found: Error: Can't resolve 'eslint-loader' in '/var/www/hashlog'
+
+ERROR in Entry module not found: Error: Can't resolve 'eslint-loader' in '/var/www/hashlog'
+```
+
+```json
+# hashlog/public/packs/manifest.json
+
+{
+  "entrypoints": {}
+}
+```
+
+## .bash_profile
+
+```
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+
+export PATH
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+# source ~/.nvm/nvm.sh
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+if [ -f ~/.nvm/nvm.sh ]; then
+        . ~/.nvm/nvm.sh
+fi
+
+# nvm use をターミナル起動時に実行する
+nvm use "v14.2.0"
+
+# yarn
+
+export PATH="$PATH:`yarn global bin`"
+```
 
 ### デーモン管理のコマンド
 
