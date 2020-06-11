@@ -762,7 +762,7 @@ ERROR in Entry module not found: Error: Can't resolve 'eslint-loader' in '/var/w
 ### es-lintのインストール
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ yarn run eslint --ext .vue --ext .js app/javascript
+[USERNAME@ip-10-0-11-43 hashlog]$ yarn run eslint --ext .vue --ext .js app/javascript
 yarn run v1.22.4
 $ /var/www/hashlog/node_modules/.bin/eslint --ext .vue --ext .js app/javascript
 
@@ -784,7 +784,7 @@ If you still can't figure out the problem, please stop by https://gitter.im/esli
 
 error Command failed with exit code 2.
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
-[aiandrox@ip-10-0-11-43 hashlog]$ yarn add eslint-plugin-vue@latest --save-dev
+[USERNAME@ip-10-0-11-43 hashlog]$ yarn add eslint-plugin-vue@latest --save-dev
 yarn add v1.22.4
 [1/4] Resolving packages...
 [2/4] Fetching packages...
@@ -798,24 +798,17 @@ Done in 6.50s.
 ```
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ bin/webpack -w
+[USERNAME@ip-10-0-11-43 hashlog]$ bin/webpack -w
 # 黄色いwarnだけで通ったあああああ
 ```
 
 ## その他独自の設定
 
 ```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ rake db:seed_fu RAILS_ENV=production
-
-
+[USERNAME@ip-10-0-11-43 hashlog]$ rake db:seed_fu RAILS_ENV=production
 ```
 
-
-## rails c
-
-```shell
-[aiandrox@ip-10-0-11-43 hashlog]$ RAILS_ENV=production rails c
-```
+# よく使うコマンド
 
 ## .bash_profile
 
@@ -850,6 +843,22 @@ nvm use "v14.2.0"
 # yarn
 
 export PATH="$PATH:`yarn global bin`"
+```
+
+## nginxとpumaの再起動
+
+```shell
+[USERNAME@ip-10-0-11-43 hashlog]$ ps aux | grep puma
+[USERNAME@ip-10-0-11-43 hashlog]$ kill -9 プロセス番号
+[USERNAME@ip-10-0-11-43 hashlog]$ bundle exec puma -C config/puma/production.rb -e production -d
+[USERNAME@ip-10-0-11-43 hashlog]$ sudo nginx -s stop
+[USERNAME@ip-10-0-11-43 hashlog]$ sudo service nginx start
+```
+
+## rails c
+
+```shell
+[USERNAME@ip-10-0-11-43 hashlog]$ RAILS_ENV=production rails c
 ```
 
 ### デーモン管理のコマンド
