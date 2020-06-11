@@ -177,6 +177,12 @@ redis.service                                 enabled
 [USERNAME@ip-10-0-11-43 ~]$ sudo systemctl start redis
 ```
 
+なぜ追加したのかわからなかったので削除した。
+
+```shell
+[aiandrox@ip-10-0-11-43 ~]$ sudo yum remove redis
+```
+
 ### nodeのインストール
 
 ```shell
