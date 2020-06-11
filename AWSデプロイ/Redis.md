@@ -141,3 +141,10 @@ https://redis.io/download
 
 
 ### なかったことにしました。
+
+```shell
+[aiandrox@ip-10-0-11-43 ~]$ rm -rf redis-6.0.5
+[aiandrox@ip-10-0-11-43 ~]$ rm -rf redis-6.0.5.tar.gz
+```
+
+他のファイルは残ったままですが、、、
