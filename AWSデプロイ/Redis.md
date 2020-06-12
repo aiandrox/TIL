@@ -148,3 +148,26 @@ https://redis.io/download
 ```
 
 他のファイルは残ったままですが、、、
+
+### AWSに作る
+
+[![Image from Gyazo](https://i.gyazo.com/83d49b4133e858e850bdff8ec3c9774a.gif)](https://gyazo.com/83d49b4133e858e850bdff8ec3c9774a)
+画像の設定 + セキュリティグループは`hashlog-redis-sg`を作成した。設定は以下の記事を参照。  
+https://qiita.com/mt2/items/af916608dfb8c4fc72c8
+
+
+リーダーエンドポイント:クラスターのリーダーエンドポイント  
+`hashlog-redis-ro.fxhyxf.ng.0001.apne1.cache.amazonaws.com:6379`をURLに設定する。
+
+```rb
+# config/initializers/sidekiq.rb
+
+Sidekiq.configure_server do |config|
+  config.redis = { url: Settings[:sidekiq][:url], namespace: 'sidekiq' }
+end
+
+Sidekiq.configure_client do |config|
+  config.redis = { url: Settings[:sidekiq][:url], namespace: 'sidekiq' }
+end
+```
+
