@@ -215,6 +215,8 @@ rails_env = ENV['RAILS_ENV'] || :development
 RAILS_ENV=production
 ```
 
+そしてそのまま（shellを出たら再度RAILS_ENV登録してね）
+
 ```shell
 [aiandrox@ip-10-0-11-43 hashlog]$ crontab -l
 no crontab for aiandrox
@@ -227,9 +229,14 @@ no crontab for aiandrox
 ## [message] Above is your schedule file converted to cron syntax; your crontab file was not updated.
 ## [message] Run `whenever --help' for more options.
 
-bundle exec whenever --update-crontab 
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec whenever --update-crontab RAILS_ENV=production
 
 [aiandrox@ip-10-0-11-43 hashlog]$ crontab -l
-no crontab for aiandrox
-# およ？？
+
+# Begin Whenever generated tasks for: RAILS_ENV=production at: 2020-06-12 21:10:29 +0900
+0 6 * * * /bin/bash -l -c 'cd /var/www/hashlog && RAILS_ENV=production bundle exec rake twitter_cron:search_tweets_everyday --silent >> /var/www/hashlog/log/cron.log 2>&1'
+
+0 7 * * * /bin/bash -l -c 'cd /var/www/hashlog && RAILS_ENV=production bundle exec rake twitter_cron:remind_reply --silent >> /var/www/hashlog/log/cron.log 2>&1'
+
+# End Whenever generated tasks for: RAILS_ENV=production at: 2020-06-12 21:10:29 +0900
 ```
