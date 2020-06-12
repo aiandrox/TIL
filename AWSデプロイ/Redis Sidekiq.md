@@ -1,5 +1,7 @@
 ## redisのインストール（以前していたよ？？）
 
+結局やめた。
+
 ```
 wget http://download.redis.io/releases/redis-6.0.5.tar.gz
 tar xzf redis-6.0.5.tar.gz
@@ -152,12 +154,15 @@ https://redis.io/download
 ### AWSに作る
 
 [![Image from Gyazo](https://i.gyazo.com/83d49b4133e858e850bdff8ec3c9774a.gif)](https://gyazo.com/83d49b4133e858e850bdff8ec3c9774a)
+
 画像の設定 + セキュリティグループは`hashlog-redis-sg`を作成した。設定は以下の記事を参照。  
 https://qiita.com/mt2/items/af916608dfb8c4fc72c8
 
+実際はEC2のwebのセキュリティグループからのアクセスにしたほうがいい。
+[![Image from Gyazo](https://i.gyazo.com/2bde2a55350d552b78cb2c65e148a3d3.png)](https://gyazo.com/2bde2a55350d552b78cb2c65e148a3d3)
 
-リーダーエンドポイント:クラスターのリーダーエンドポイント  
-`hashlog-redis-ro.fxhyxf.ng.0001.apne1.cache.amazonaws.com:6379`をURLに設定する。
+
+**プライマリエンドポイント:クラスターのプライマリエンドポイント**をURLに設定する。
 
 ```rb
 # config/initializers/sidekiq.rb
@@ -171,3 +176,16 @@ Sidekiq.configure_client do |config|
 end
 ```
 
+```
+# config/settings/production.rb
+
+sidekiq:
+  url: 'redis://hashlog-redis.fxhyxf.ng.0001.apne1.cache.amazonaws.com:6379'
+```
+## sidekiqのデーモン化
+
+```
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec sidekiq --environment production -d --logfile log/sidekiq.log
+WARNING: Daemonization mode will be removed in Sidekiq 6.0, see #4045. Please use a proper process supervisor to start and manage your services
+WARNING: Logfile redirection will be removed in Sidekiq 6.0, see #4045. Sidekiq will only log to STDOUT
+```
