@@ -189,3 +189,47 @@ sidekiq:
 WARNING: Daemonization mode will be removed in Sidekiq 6.0, see #4045. Please use a proper process supervisor to start and manage your services
 WARNING: Logfile redirection will be removed in Sidekiq 6.0, see #4045. Sidekiq will only log to STDOUT
 ```
+
+
+## rakeタスク
+
+```
+[aiandrox@ip-10-0-11-43 hashlog]$ rake twitter_cron:search_tweets_everyday RAILS_ENV=production
+```
+
+実行オーケー
+
+```
+# config/schedule.rb
+...
+rails_env = ENV['RAILS_ENV'] || :development
+...
+```
+
+なので、
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ export RAILS_ENV=production
+
+[aiandrox@ip-10-0-11-43 hashlog]$ env | grep RAILS
+RAILS_ENV=production
+```
+
+```shell
+[aiandrox@ip-10-0-11-43 hashlog]$ crontab -l
+no crontab for aiandrox
+
+[aiandrox@ip-10-0-11-43 hashlog]$ bundle exec whenever RAILS_ENV=production
+0 6 * * * /bin/bash -l -c 'cd /var/www/hashlog && RAILS_ENV=production bundle exec rake twitter_cron:search_tweets_everyday --silent >> /var/www/hashlog/log/cron.log 2>&1'
+
+0 7 * * * /bin/bash -l -c 'cd /var/www/hashlog && RAILS_ENV=production bundle exec rake twitter_cron:remind_reply --silent >> /var/www/hashlog/log/cron.log 2>&1'
+
+## [message] Above is your schedule file converted to cron syntax; your crontab file was not updated.
+## [message] Run `whenever --help' for more options.
+
+bundle exec whenever --update-crontab 
+
+[aiandrox@ip-10-0-11-43 hashlog]$ crontab -l
+no crontab for aiandrox
+# およ？？
+```
