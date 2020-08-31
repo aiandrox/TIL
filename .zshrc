@@ -1,5 +1,3 @@
-alias code='open -a Visual\ Studio\ Code'
-
 # Rails Command
 alias be='bundle exec'
 alias bi='bundle install'
@@ -8,27 +6,32 @@ alias rc='rails console'
 alias mig='bundle exec rails db:migrate'
 
 # git command
-alias gc='git commit'
+alias g='git'
+alias gca='git commit --amend'
+# ブランチを簡単切り替え。git checkout lbで実行できる
+alias -g lb='`git branch | peco --prompt "GIT BRANCH>" | head -n 1 | sed -e "s/^\*\s*//g"`'
+# dockerコンテナに入る。deで実行できる
+alias de='docker exec -it $(docker ps | peco | cut -d " " -f 1) /bin/bash'
 
-# Executes commands at the start of an interactive session.
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
-
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
-export PATH="$HOME/.rbenv/shims:$PATH"
+# anyenv
+export PATH="$HOME/.anyenv/bin:$PATH"
+eval "$(anyenv init -)"
 
-source /usr/local/etc/bash_completion.d/git-prompt.sh
+export PATH="$PATH:$HOME/.flutter/flutter/bin"
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export PATH="$PATH:`yarn global bin`"
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # git ブランチ名を色付きで表示させるメソッド
+source /usr/local/etc/bash_completion.d/git-prompt.sh
 function rprompt-git-current-branch {
   local branch_name st branch_status
 
@@ -67,3 +70,22 @@ setopt prompt_subst
 
 # プロンプトの右側にメソッドの結果を表示させる
 RPROMPT='`rprompt-git-current-branch`'
+
+# peco settings
+# 過去に実行したコマンドを選択。ctrl-rにバインド
+function peco-select-history() {
+  BUFFER=$(\history -n -r 1 | peco --query "$LBUFFER")
+  CURSOR=$#BUFFER
+  zle clear-screen
+}
+zle -N peco-select-history
+bindkey '^r' peco-select-history
+
+# search a destination from cdr list
+function peco-get-destination-from-cdr() {
+  cdr -l | \
+  sed -e 's/^[[:digit:]]*[[:blank:]]*//' | \
+  peco --query "$LBUFFER"
+}
+
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
