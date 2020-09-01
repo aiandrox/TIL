@@ -202,7 +202,8 @@ irb(main):017:0> helper.number_with_delimiter(11123444321, delimiter: 'おりゃ
 - `app.result_path`
 - `helper.time_ago_in_words`
 
-余談  
+#### 余談
+
 特定のメソッドの引数を確認する。
 
 ```rb
@@ -215,19 +216,15 @@ https://qiita.com/sonots/items/f18cf3ca8c76bfb4d6f0
 
 ### エスケープ処理
 
+クロスサイトスクリプティング（XXS）を防ぐために、ただの文字列はHTMLにせずにエスケープするようになっている。
+
 ```
 <%= raw "<script>alert('sample');</script>" %>
 <%= "<script>alert('sample');</script>".html_safe %>
 ```
 
-`ActiveSupport::SafeBuffer`オブジェクトになり、jsが実行される。  
+上記の処理によって`ActiveSupport::SafeBuffer`オブジェクトになり、jsが実行される。  
 （rawメソッドは内部で`html_safe`を呼んでいる）
 
-`ActiveSupport::SafeBuffer`は安全な文字列という意味なので、これに対してはエスケープ処理をしない。つまり、何度同じ処理をしても多重エスケープの問題を起こさない！
-
-
-
-
-
-
-
+`ActiveSupport::SafeBuffer`は`String`のサブクラス。そして、安全な文字列という意味なので、これに対して`html_safe`をしてもエスケープ処理をしない。
+つまり、何度同じ処理をしても多重エスケープの問題を起こさない！
