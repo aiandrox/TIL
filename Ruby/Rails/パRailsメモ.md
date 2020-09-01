@@ -1,7 +1,9 @@
+知らなかったことを書いていく。
+
 # 1章
 
 **binstub**  
-`bundle exec`を付けなくてもいい。`./bin`内に実行ファイルが入っている。こういうファイルのこと。
+`bundle exec`を付けなくてもいい実行ファイルのこと。`./bin`内に入っている。
 
 ```
 $ rails stats
@@ -26,10 +28,10 @@ $ rails stats
 ```
 
 - `rails runner`  
-`rails runner 'puts Rails.env'`, `rails runner hoge.rb`てな感じで実行できる。
+  - `rails runner 'puts Rails.env'`, `rails runner hoge.rb`てな感じで実行できる。
 
 - `rails dbconsole`, `rails db`  
-データベースの中に入る。
+  - データベースの中に入る。
 
 # 2章
 
@@ -72,3 +74,32 @@ irb(main):016:0> Book.written_about('ab')
   Book Load (0.1ms)  SELECT "books".* FROM "books" LIMIT ?  [["LIMIT", 11]]
 => #<ActiveRecord::Relation [#<Book id: 1, title: "aaのついての本", created_at: "2020-09-01 05:20:51", updated_at: "2020-09-01 05:20:51">]>
 ```
+
+`pluck`メソッドで必要なカラムの配列だけ取得できる。  
+https://qiita.com/k-o-u/items/31e4a2f9f5d2a3c7867f
+
+| コールバックポイント | create | update | destroy |
+| :--------------| :------| :------| :-------|
+| before_validation | ○ | ○ | × |
+| after_validation  | ○ | ○ | × |
+| before_save |  ○ | ○ | × |
+| around_save | ○ | ○ | × |
+| after_save  | ○ | ○ | × |
+| before_create | ○ | × | × |
+| around_create | ○ | × | × |
+| after_create  | ○ | × | × |
+| before_update | × | ○ | × |
+| around_update | × | ○ | × |
+| after_update  | × | ○ | × |
+| before_destroy| × | × | ○ |
+| around_destroy| × | × | ○ |
+| after_destroy | × | × | ○ |
+
+- `after_initialize`
+  - モデルがインスタンス化された後に呼び出される。  
+- `after_find`
+  - `first`, `last`, `find`, `find_by`によってインスタンス化した後に呼び出される。
+
+https://qiita.com/rtoya/items/29cef3e328299781a328
+
+
