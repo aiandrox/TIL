@@ -43,8 +43,32 @@ https://railsguides.jp/active_record_querying.html
 ActiveRecord::Relationに対して使うことのできるメソッドは例えば以下のものがある。
 
 - **joins**
-  inner_joinでくくる  
+  - inner_joinでくくる  
 - **left_outer_joins**
-  left outer joinでくくる
+  - left outer joinでくくる
 
   
+## クラスメソッドとスコープの違い
+
+`find_by`を使ったときのnilの挙動に違いがある。  
+クラスメソッドだと`nil`になるが、スコープだとそのスコープをなかったことにして再度探索する。
+
+```rb
+class Book < ApplicationRecord
+  scope :written_about, ->(theme) { find_by("title LIKE ?", "%#{theme}%") }
+
+  def self.written(theme)
+     find_by("title LIKE ?", "%#{theme}%")
+  end
+end
+```
+
+```rb
+irb(main):015:0> Book.written('ab')
+  Book Load (0.2ms)  SELECT "books".* FROM "books" WHERE (title LIKE '%ab%') LIMIT ?  [["LIMIT", 1]]
+=> nil
+irb(main):016:0> Book.written_about('ab')
+  Book Load (0.4ms)  SELECT "books".* FROM "books" WHERE (title LIKE '%ab%') LIMIT ?  [["LIMIT", 1]]
+  Book Load (0.1ms)  SELECT "books".* FROM "books" LIMIT ?  [["LIMIT", 11]]
+=> #<ActiveRecord::Relation [#<Book id: 1, title: "aaのついての本", created_at: "2020-09-01 05:20:51", updated_at: "2020-09-01 05:20:51">]>
+```
