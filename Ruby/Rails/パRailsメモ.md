@@ -44,39 +44,43 @@ https://railsguides.jp/active_record_querying.html
 
 ActiveRecord::Relationに対して使うことのできるメソッドは例えば以下のものがある。
 
-- **joins**
+- `joins`
   - inner_joinでくくる  
-- **left_outer_joins**
+- `left_outer_joins`
   - left outer joinでくくる
 
   
 ## クラスメソッドとスコープの違い
 
 `find_by`を使ったときのnilの挙動に違いがある。  
-クラスメソッドだと`nil`になるが、スコープだとそのスコープをなかったことにして再度探索する。
+クラスメソッドだと`nil`になるが、スコープだとそのスコープをなかったことにして再度実行する。  
+`where`だとnilではないので、どちらも`#<ActiveRecord::Relation []>`になる。
 
 ```rb
 class Book < ApplicationRecord
-  scope :written_about, ->(theme) { find_by("title LIKE ?", "%#{theme}%") }
+  scope :written_about_scope, ->(theme) { find_by("title LIKE ?", "%#{theme}%") }
 
-  def self.written(theme)
+  def self.written_about_class(theme)
      find_by("title LIKE ?", "%#{theme}%")
   end
 end
 ```
 
 ```rb
-irb(main):015:0> Book.written('ab')
-  Book Load (0.2ms)  SELECT "books".* FROM "books" WHERE (title LIKE '%ab%') LIMIT ?  [["LIMIT", 1]]
-=> nil
-irb(main):016:0> Book.written_about('ab')
+irb(main):016:0> Book.written_about_scope('ab')
   Book Load (0.4ms)  SELECT "books".* FROM "books" WHERE (title LIKE '%ab%') LIMIT ?  [["LIMIT", 1]]
   Book Load (0.1ms)  SELECT "books".* FROM "books" LIMIT ?  [["LIMIT", 11]]
 => #<ActiveRecord::Relation [#<Book id: 1, title: "aaのついての本", created_at: "2020-09-01 05:20:51", updated_at: "2020-09-01 05:20:51">]>
+
+irb(main):017:0> Book.written_about_class('ab')
+  Book Load (0.2ms)  SELECT "books".* FROM "books" WHERE (title LIKE '%ab%') LIMIT ?  [["LIMIT", 1]]
+=> nil
 ```
 
 `pluck`メソッドで必要なカラムの配列だけ取得できる。  
 https://qiita.com/k-o-u/items/31e4a2f9f5d2a3c7867f
+
+## コールバック
 
 | コールバックポイント | create | update | destroy |
 | :--------------| :------| :------| :-------|
@@ -100,6 +104,64 @@ https://qiita.com/k-o-u/items/31e4a2f9f5d2a3c7867f
 - `after_find`
   - `first`, `last`, `find`, `find_by`によってインスタンス化した後に呼び出される。
 
+順番などは以下を参照  
 https://qiita.com/rtoya/items/29cef3e328299781a328
 
+## enum
 
+`book.enum_column_before_type_cast`のように`_before_type_cast`を付けると、でDBに保存されている値（integer）を取得できる。
+
+`Book.published`でwhere絞り込み検索、`Book.not_published`のようにnotを付けるとnot検索ができる。
+
+enumerizeというgemもあるのでオススメ
+
+## コントローラ
+
+- before_action
+- around_action
+  - アクションの前後で実行
+- after_action
+
+`around_action`の場合、アクションを囲むような感じになるので、該当アクションを`yield`とする。
+
+```rb
+around_action :hoge
+
+def hoge
+  logger.info 'この後アクションがあるやで'
+  yield
+  logger.info 'アクションが実行されたやで'
+end
+```
+
+## ビュー
+
+### variantsによるテンプレート切り替え
+
+```rb
+class ApplicationController < ActionController::Base
+  before_action :detect_mobile_variant
+  
+  private
+  
+  def detect_mobile_variant
+    request.variant = :mobile if request.user_agent =~ /iPhine/
+  end
+end
+```
+
+この場合、UserAgentがiPhoneだったときは`show.html+mobile.erb`を表示する。
+
+### ヘルパーメソッド
+
+- `url_for`
+  - URLパスを文字列にする。
+  - 引数は`root_path`, `root_url`,   
+  `controller: :hoge, action: :edit` => `/hoge/edit`  
+  `controller: :hoge, action: :edit, id: 1234, detailed: 'true'` => `/hoge/edit?detailed=true&id=1234`
+  
+  
+  
+  
+  
+  
