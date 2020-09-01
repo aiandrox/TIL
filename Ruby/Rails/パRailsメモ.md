@@ -30,3 +30,21 @@ $ rails stats
 
 - `rails dbconsole`, `rails db`  
 データベースの中に入る。
+
+# 2章
+
+## Query Interface
+
+https://railsguides.jp/active_record_querying.html
+
+「インターフェイス」は何かと何かをつなぐ間という概念。  
+ここではSQLのクエリとRailsActiveRecordの間。
+
+ActiveRecord::Relationに対して使うことのできるメソッドは例えば以下のものがある。
+
+- **joins**
+  inner_joinでくくる  
+- **left_outer_joins**
+  left outer joinでくくる
+
+  
