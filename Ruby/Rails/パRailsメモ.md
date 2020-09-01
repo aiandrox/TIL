@@ -182,11 +182,52 @@ irb(main):014:0> helper.time_ago_in_words(Time.now + 1.minutes)
 => "1 minute"
 ```
 
+#### `number_with_delimiter`
+
+引数の数字を3桁ごとに`,`で区切った文字列を返す。  
+delimiterで間の文字を指定することもできる（誰得？）。
+
+```rb
+irb(main):015:0> helper.number_with_delimiter(11123444321)
+=> "11,123,444,321"
+irb(main):016:0> helper.number_with_delimiter(11123444321, delimiter: '@')
+=> "11@123@444@321"
+irb(main):017:0> helper.number_with_delimiter(11123444321, delimiter: 'おりゃ')
+=> "11おりゃ123おりゃ444おりゃ321"
+```
+
+
 ### コンソールで呼び出すとき
 
 - `app.result_path`
 - `helper.time_ago_in_words`
-  
-  
-  
-  
+
+余談  
+特定のメソッドの引数を確認する。
+
+```rb
+irb(main):025:0> Book.method(:new).parameters
+=> [[:opt, :attributes], [:block, :block]]
+```
+
+https://qiita.com/sonots/items/f18cf3ca8c76bfb4d6f0
+
+
+### エスケープ処理
+
+```
+<%= raw "<script>alert('sample');</script>" %>
+<%= "<script>alert('sample');</script>".html_safe %>
+```
+
+`ActiveSupport::SafeBuffer`オブジェクトになり、jsが実行される。  
+（rawメソッドは内部で`html_safe`を呼んでいる）
+
+`ActiveSupport::SafeBuffer`は安全な文字列という意味なので、これに対してはエスケープ処理をしない。つまり、何度同じ処理をしても多重エスケープの問題を起こさない！
+
+
+
+
+
+
+
