@@ -154,13 +154,38 @@ end
 
 ### ヘルパーメソッド
 
-- `url_for`
-  - URLパスを文字列にする。
-  - 引数は`root_path`, `root_url`,   
-  `controller: :hoge, action: :edit` => `/hoge/edit`  
-  `controller: :hoge, action: :edit, id: 1234, detailed: 'true'` => `/hoge/edit?detailed=true&id=1234`
-  
-  
+#### `url_for`
+
+URLパスを文字列にする。
+
+引数
+- `root_path` => `"/"`
+- `result_url` => `"http://www.example.com/result"`
+- `controller: :hoge, action: :edit` => `"/hoge/edit"`  
+- `controller: :hoge, action: :edit, id: 1234, detailed: 'true'` => `"/hoge/edit?detailed=true&id=1234"`
+
+#### `time_ago_in_words`
+
+現在時刻と引数の差をざっくり文字列として返す。  
+i18nに対応する。
+
+```rb
+irb(main):010:0> helper.time_ago_in_words(Time.now)
+=> "less than a minute"
+irb(main):011:0> helper.time_ago_in_words(Time.now - 1.hours)
+=> "about 1 hour"
+irb(main):012:0> helper.time_ago_in_words(Time.now + 1.hours)
+=> "about 1 hour"
+irb(main):013:0> helper.time_ago_in_words(Time.now + 1.hours + 1.minutes)
+=> "about 1 hour"
+irb(main):014:0> helper.time_ago_in_words(Time.now + 1.minutes)
+=> "1 minute"
+```
+
+### コンソールで呼び出すとき
+
+- `app.result_path`
+- `helper.time_ago_in_words`
   
   
   
