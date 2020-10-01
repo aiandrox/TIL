@@ -1,4 +1,4 @@
-中間テーブル（coupon_plans）から、クーポンが存在しないレコードを削除したい。
+## 中間テーブル（coupon_plans）から、クーポンが存在しないレコードを削除したい。
 
 SELECT
 
@@ -59,5 +59,16 @@ WHERE
       coupon_plans.coupon_id = coupons.id)
     WHERE
       coupons.id IS NULL) as tmp)
-
 ```
+
+
+### ActiveRecord
+
+certificate has_many :plans
+
+```ruby
+Plan.left_joins(:certificate).select("*").where(certificates: { id: nil })
+```
+
+親を持たない子レコードを取得
+
