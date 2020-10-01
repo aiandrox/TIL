@@ -15,3 +15,7 @@ const editedRemindDay = !!remindDay === false ? 0 : this.filter(remindDay)
 ```
 
 で代入ができた。
+
+## 原因
+
+スコープの問題
