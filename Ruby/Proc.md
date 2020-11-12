@@ -38,6 +38,11 @@ irb(main):003:0> :to_s.to_proc
 
 シンボルに対して`to_proc`をすると同じ名前のProcオブジェクトを返す
 
+```rb
+:to_s.to_proc
+=> #<Proc:0x00007fc26b965890(&:to_s)>
+```
+
 閑話休題
 
 ```ruby
