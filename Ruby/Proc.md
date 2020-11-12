@@ -16,6 +16,7 @@ p = Proc.new({|s| s.to_s})  # この書き方はダメ
 pは既にProcオブジェクトなので、to_procしても同じなんだけど
 
 ```ruby
+# おかしい
 [:aaa, :bbb, :ccc].map(&to_s)
 ```
 
