@@ -27,4 +27,6 @@ No Rakefile found (looking for: rakefile, Rakefile, rakefile.rb, Rakefile.rb)
 (See full trace by running task with --trace)
 ```
 
+
+
 できた！！
