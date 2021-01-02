@@ -30,4 +30,3 @@ Template execution failed: ReferenceError: features is not defined
 ```
 
 https://stackoverflow.com/questions/54743760/error-deploy-vuejs-app-in-firebase-hosting
-
