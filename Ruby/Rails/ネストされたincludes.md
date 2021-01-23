@@ -1,5 +1,5 @@
 ```rb
-Hoge.includes([:foo, { hugas: { piyo: :poyos } }])
+Answer.includes([:user, { review: [:evaluation, :reviewer, :approver] }, { question: [:subject, { course: :certificate }] }])
 ```
 
 こんな感じ。
