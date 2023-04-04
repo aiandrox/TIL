@@ -4,6 +4,12 @@
 git grep -l '# 後で消す' | xargs -I {} sh -c 'echo {} | sed "s/app\//spec\//;s/\.rb$/_spec.rb/"'
 ```
 
+検索時にディレクトリを除外
+
+```sh
+git grep -l '# 後で消す' -- ':^transformer'
+```
+
 ### ファイルを取得して一括削除
 
 ```sh
