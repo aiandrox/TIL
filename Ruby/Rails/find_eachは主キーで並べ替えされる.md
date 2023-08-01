@@ -16,6 +16,6 @@ users.order(:id).pluck(:name)
 
 ！！！？？？と思ったら、`find_each`は主キーで並べ替えて勝手にやるらしい。。。
 
-
+https://railsdoc.com/page/find_each
 https://github.com/rails/rails/blob/984c3ef2775781d47efa9f541ce570daa2434a80/activerecord/lib/active_record/relation/batches.rb#L40
 
